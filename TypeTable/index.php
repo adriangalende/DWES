@@ -40,6 +40,11 @@
         </thead>
         <tbody>
             <?php
+                /**
+                 * @param $var
+                 * @return string
+                 * Convierte la entrada recibida en string
+                 */
                 function stringfy($var){
                     $type = gettype($var);
                     switch ($type) {
@@ -56,6 +61,11 @@
                     }
                 }
 
+            /**
+             * Directiva para mostrar errores
+             */
+                error_reporting(E_ALL);
+
                 $varArray = array( null, 0,true,false,"\"0\"","\"\"","foo",array(),"unset(&dollar;var)");
 
 
@@ -64,8 +74,8 @@
                 for ($i=0; $i < count($varArray);$i++) {
                     $varString = stringfy($varArray[$i]);
 
-                    ## Casos especial unset($var)
-                    ## (unset) - forzado a NULL
+                    /** Casos especial unset($var)
+                    (unset) - forzado a NULL **/
                     if($i == 8){
                         unset($v);
                     } else {
@@ -73,12 +83,13 @@
                     }
 
                     $isset = isset($v)?"true":"false";
-                    $empty = empty($v)?"true":"false";
+                    $empty = empty($v) == 1?"true":"false";
                     $isNull = is_null($v)?"true":"false";
-                    $isBool = (boolean) $v?"true":"false";
+                    $isBool = (bool) $v?"true":"false";
 
 
-                    ## Creamos la tabla dinámicamente
+                    /** creamos la tabla dinámicamente */
+
                     $resultString .= "<tr>";
                     $resultString .= "<td>". ($i+1) . "</td>";
                     $resultString .= "<td>&dollar;var = ". $varString . "</td>";
@@ -89,7 +100,7 @@
                     $resultString .= "</tr>";
                 }
 
-                echo $resultString;
+                echo $resultString.PHP_EOL;
             ?>
         </tbody>
     </table>
