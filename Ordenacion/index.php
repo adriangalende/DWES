@@ -110,7 +110,9 @@ $arrayResultados=array();
          $entrada = "";
      }
  } else if ($fichero){
-
+     echo "He leído los números del archivo numeros.txt <br>";
+     $lineas = file('numeros.txt');
+     $entrada = explode(",", $lineas[0]);
  }else {
      echo "Como no has seleccionado ningún método para generar la lista de números, he cogido los números asignados por defecto. <br>";
  }
