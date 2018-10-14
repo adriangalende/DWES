@@ -20,7 +20,10 @@
 <form id="formularioOrdenacion" method="post">
     <select name="algoritmo" id="selectAlgoritmo">
         <option value="0">Elije una opción</option>
-        <option value="1">Selección directa</option>
+        <option value="1">Inserción directa</option>
+        <option value="3">Selección directa</option>
+        <option value="2">Burbuja</option>
+        <option value="4">Quicksort</option>
     </select><br>
     <input type="checkbox" name="random" id="random"> random
     <input type="number" name="entradaRandom" id="entradaRandom"><br>
@@ -29,15 +32,10 @@
     <input type="text" name="entradaText" id="entradaText"> *separa cada número con una coma<br>
 
     <input type="checkbox" name="fichero" id="fichero"> fichero <br>
+    <p> Si no seleccionas ningún método de entrada, se cargará una matriz por defecto</p>
     <input type="submit" value="enviar">
 </form>
 <?php
-
-/**
- *  Comprobamos si se ha refrescado la página
- *  y así limpiamos los parámetros que pasaremos.
- */
-
 session_start();
 
 /**
@@ -79,12 +77,16 @@ $_SESSION['loaded'] = true;
 $entrada = array(4, 10, 3, 20, 1, 0); // entrada por defecto de números
 $entradaText = false;
 $random = false;
+$fichero = false;
 $entradaFichero = false;
+$arrayResultados=array();
 
  if(isset($_POST['entradaText']) && !empty($_POST['entradaText'])){
      $entradaText = true;
  } else if (isset($_POST['random']) && $_POST['random'] == "on"){
      $random = true;
+ } else if (isset($_POST['fichero']) && $_POST['fichero'] == "on"){
+     $fichero = true;
  }
 
  if($entradaText){
@@ -103,10 +105,13 @@ $entradaFichero = false;
        for($i=0;$i<$_POST['entradaRandom'];$i++){
            $entrada[$i] = rand(-100, 100);
        }
-     } else {
+     }else {
          echo "Dime la cantidad de números rándom que quieres generar.";
+         $entrada = "";
      }
- } else {
+ } else if ($fichero){
+
+ }else {
      echo "Como no has seleccionado ningún método para generar la lista de números, he cogido los números asignados por defecto. <br>";
  }
 
@@ -121,14 +126,20 @@ $entradaFichero = false;
  */
 
  function ordenar($algoritmo, $entrada){
-     $arrayMetodosOrdenacion = array("","directa");
-     if($algoritmo != 0){
-         $arrayMetodosOrdenacion[$algoritmo]($entrada);
+     $arrayMetodosOrdenacion = array("","directa","burbuja","seleccion","quicksort");
+     if($algoritmo != 0 && !(empty($entrada))){
+         if($algoritmo != 4){
+             $arrayMetodosOrdenacion[$algoritmo]($entrada);
+         } else {
+             echo "Has seleccionado Ordenación por el método \"Quick sort\": <br>";
+             $resultado = $arrayMetodosOrdenacion[$algoritmo]($entrada);
+             echo $resultado;
+         }
+
      } else {
          echo "por favor, selecciona un método de ordenación para poder seguir";
      }
  }
-
 
 
     session_destroy();
